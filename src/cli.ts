@@ -14,7 +14,7 @@ export function getParams(): Promise<Params> {
   return new Promise((resolve) => {
     program
       .command('gen-export-map')
-      .option('--config', 'config file path')
+      .option('--config <path>', 'config file path')
       .action((result) => {
         resolve(result);
       });

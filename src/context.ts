@@ -1,4 +1,5 @@
-import * as fse from 'fs-extra';
+import { resolve } from 'path';
+import { existsSync } from 'fs-extra';
 import { sync } from 'glob';
 import type { Context, Params } from './types';
 
@@ -10,9 +11,9 @@ export async function loadContext(params: Params): Promise<Context> {
   let srcDir: string | undefined;
   let transform: undefined | ((path: string) => string);
 
-  if (params.config && fse.existsSync(params.config)) {
+  if (params.config && existsSync(params.config)) {
     try {
-      const config = await require(params.config);
+      const config = await require(resolve(params.config));
 
       config.cwd && (cwd = config.cwd);
       srcDir = config.srcDir;
