@@ -33,8 +33,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@rosmarinus/compiler-kit": "^0.1.2",
+    "@rosmarinus/compiler-kit": "^0.2.0",
     "commander": "^11.1.0",
+    "fs-extra": "^11.1.1",
     "glob": "^10.3.10",
     "tslib": "^2.6.2"
   },

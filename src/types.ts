@@ -7,3 +7,8 @@ export interface Context {
   outputFileName: string;
   cwd: string;
 }
+
+export interface ExportItem {
+  file: string;
+  id: string;
+}
