@@ -27,14 +27,16 @@ export async function loadContext(params: Params): Promise<Context> {
         }
       }
 
+      if (Array.isArray(config.exclude)) {
+        const excludeList = config.exclude.filter((file: any) => typeof file === 'string') as string[];
+
+        input = input.filter((file) => !excludeList.includes(file));
+      }
+
       typeof config.outputFileName === 'string' && (outputFileName = config.outputFileName);
     } catch (e) {
       console.warn('load config error');
     }
-
-    const config = await fse.readJSON(params.config);
-
-    return config;
   }
 
   return {
