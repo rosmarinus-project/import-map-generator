@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve, relative } from 'path';
 import { esCompiler, pathUtils } from '@rosmarinus/compiler-kit';
 import { readFile, existsSync, writeJSON } from 'fs-extra';
 import type { Context, ExportItem } from './types';
@@ -11,7 +11,19 @@ export async function genExportMap(ctx: Context) {
 
   promiseList.forEach((list) => items.push(...list));
 
-  await writeJSON(ctx.outputFileName, { items }, { spaces: 2 });
+  const obj: Record<string, { from: string }> = {};
+
+  items.forEach((item) => {
+    const file = relative(ctx.cwd, item.file);
+
+    if (obj[item.id]) {
+      throw new Error(`duplicate export id: ${item.id}, from ${obj[item.id].from} and ${file}`);
+    } else {
+      obj[item.id] = { from: file };
+    }
+  });
+
+  await writeJSON(resolve(ctx.cwd, ctx.outputFileName), obj, { spaces: 2 });
 }
 
 async function getOneFileExportItemList(file: string, cwd?: string): Promise<ExportItem[]> {

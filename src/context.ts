@@ -3,7 +3,7 @@ import { sync } from 'glob';
 import type { Context, Params } from './types';
 
 export async function loadContext(params: Params): Promise<Context> {
-  const cwd = process.cwd();
+  let cwd = process.cwd();
 
   let input: string[] = [];
   let outputFileName = 'dist/map.json';
@@ -11,6 +11,8 @@ export async function loadContext(params: Params): Promise<Context> {
   if (params.config && fse.existsSync(params.config)) {
     try {
       const config = await require(params.config);
+
+      config.cwd && (cwd = config.cwd);
 
       if (config.input) {
         if (typeof config.input === 'string') {
