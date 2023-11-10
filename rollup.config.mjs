@@ -6,11 +6,23 @@ import babel from '@rollup/plugin-babel';
 
 const external = [];
 
-function getConfig(format, banner) {
+/**
+ *
+ * @param {{
+ * input: string | object;
+ * format: string;
+ * output?: string;
+ * banner?: string;
+ * }} param0
+ * @returns
+ */
+function getConfig({ input, format, output, banner }) {
+  const dir = `dist/${output || format}`;
+
   return {
-    input: 'src/index.ts',
+    input,
     output: {
-      file: `dist/${format}/index.js`,
+      dir,
       format,
       banner,
       sourcemap: true,
@@ -18,11 +30,11 @@ function getConfig(format, banner) {
     external,
     plugins: [
       commonjs(),
-      resolve({
-        preferBuiltins: true,
-      }),
+      resolve(),
       json(),
       typescript({
+        outDir: dir,
+        declarationDir: dir,
         tsconfig: './tsconfig.json',
       }),
       babel({
@@ -32,4 +44,8 @@ function getConfig(format, banner) {
   };
 }
 
-export default [getConfig('cjs'), getConfig('es')];
+export default [
+  getConfig({ input: 'src/cli.ts', format: 'cjs', output: 'bin', banner: '#!/usr/bin/env node' }),
+  getConfig({ input: 'src/index.ts', format: 'es' }),
+  getConfig({ input: 'src/index.ts', format: 'cjs' }),
+];

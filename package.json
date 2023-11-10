@@ -8,6 +8,9 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
+  "bin": {
+    "rosmarinus-import-map-generator": "dist/bin/cli.js"
+  },
   "scripts": {
     "dev": "rollup -c rollup.config.mjs -w",
     "build": "rimraf dist && rollup -c rollup.config.mjs",
@@ -30,7 +33,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@rosmarinus/compiler-kit": "^0.1.2"
+    "@rosmarinus/compiler-kit": "^0.1.2",
+    "commander": "^11.1.0",
+    "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.8",
