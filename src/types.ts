@@ -6,6 +6,8 @@ export interface Context {
   input: string[];
   outputFileName: string;
   cwd: string;
+  srcDir?: string;
+  transform?: (path: string) => string;
 }
 
 export interface ExportItem {

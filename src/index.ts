@@ -11,15 +11,23 @@ export async function genExportMap(ctx: Context) {
 
   promiseList.forEach((list) => items.push(...list));
 
-  const obj: Record<string, { from: string }> = {};
+  const obj: Record<string, { from: string; fromImportPath: string }> = {};
 
   items.forEach((item) => {
     const file = relative(ctx.cwd, item.file);
 
     if (obj[item.id]) {
       throw new Error(`duplicate export id: ${item.id}, from ${obj[item.id].from} and ${file}`);
+    } else if (ctx.transform) {
+      obj[item.id] = { from: file, fromImportPath: ctx.transform(file) };
     } else {
-      obj[item.id] = { from: file };
+      const pathWithoutExt = file.replace(/\..*$/g, '');
+
+      const fromImportPath = ctx.srcDir
+        ? relative(resolve(ctx.cwd, ctx.srcDir), resolve(ctx.cwd, pathWithoutExt))
+        : pathWithoutExt;
+
+      obj[item.id] = { from: file, fromImportPath };
     }
   });
 

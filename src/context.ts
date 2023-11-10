@@ -7,12 +7,16 @@ export async function loadContext(params: Params): Promise<Context> {
 
   let input: string[] = [];
   let outputFileName = 'dist/map.json';
+  let srcDir: string | undefined;
+  let transform: undefined | ((path: string) => string);
 
   if (params.config && fse.existsSync(params.config)) {
     try {
       const config = await require(params.config);
 
       config.cwd && (cwd = config.cwd);
+      srcDir = config.srcDir;
+      transform = config.transform;
 
       if (config.input) {
         if (typeof config.input === 'string') {
@@ -42,6 +46,8 @@ export async function loadContext(params: Params): Promise<Context> {
   }
 
   return {
+    srcDir,
+    transform,
     input,
     outputFileName,
     cwd,
