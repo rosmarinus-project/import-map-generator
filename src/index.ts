@@ -1,6 +1,6 @@
 import { resolve, relative } from 'path';
 import { esCompiler, pathUtils } from '@rosmarinus/compiler-kit';
-import { readFile, existsSync, writeJSON } from 'fs-extra';
+import { readFile, existsSync, writeJSON, ensureFile } from 'fs-extra';
 import type { Context, ExportItem } from './types';
 
 export async function genExportMap(ctx: Context) {
@@ -31,7 +31,10 @@ export async function genExportMap(ctx: Context) {
     }
   });
 
-  await writeJSON(resolve(ctx.cwd, ctx.outputFileName), obj, { spaces: 2 });
+  const outputFilePath = resolve(ctx.cwd, ctx.outputFileName);
+
+  await ensureFile(outputFilePath);
+  await writeJSON(outputFilePath, obj, { spaces: 2 });
 }
 
 async function getOneFileExportItemList(file: string, cwd?: string): Promise<ExportItem[]> {
