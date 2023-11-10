@@ -1,6 +1,6 @@
 {
   "name": "@rosmarinus/import-map-generator",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "a tool to generate a import map json",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
