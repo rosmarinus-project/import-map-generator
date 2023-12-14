@@ -136,6 +136,12 @@ function getExportItemFromExportNamedDeclaration(
     declarations.forEach((declaration) => {
       if (declaration.id.type === 'Identifier') {
         idList.push(declaration.id.name);
+      } else if (declaration.id.type === 'ObjectPattern') {
+        declaration.id.properties.forEach((property) => {
+          if (property.type === 'ObjectProperty' && property.value.type === 'Identifier') {
+            idList.push(property.value.name);
+          }
+        });
       }
     });
   } else if (node.declaration?.type === 'ClassDeclaration') {
